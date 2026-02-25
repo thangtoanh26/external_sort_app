@@ -21,6 +21,7 @@ bool isFileExists(string filePath) {
 }
 
 string getCurrentTime() {
+    // Hàm được generate bởi Claude AI
     try {
         // Get current time_point from system_clock
         auto now = std::chrono::system_clock::now();
@@ -48,17 +49,26 @@ string getCurrentTime() {
     }
 }
 
-void tao_file() {
+void tao_file(vector<double>& numbers) {
     string fileName;
-    cout << "Enter file name: "; cin >> fileName;
-    cout << fileName << endl;
+    cout << "Enter new file name: "; cin >> fileName;
     string currentTime = getCurrentTime();
     if (isFileExists(fileName + ".dat")) {
         cout << "There is already a file with the same name in this location. Want to rename to " << fileName
              << "_" << currentTime << ".dat? 1 (Yes) / 0 (No) : ";
-        int check; cin >> check;
+        int check;
+        if (!(cin >> check)) {
+            std::cin.clear(); 
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+            std::cout << "Illegal input (NaN). Canceled\n";
+            return;
+        }
         if (check == 1) fileName += "_" + currentTime;
-        else return;
+        else {
+            if (check != 0) cout << "Illegal input (Must be 0 or 1). Cancelled\n";
+            return;
+        }
     }
     fileName += ".dat";
     std::ofstream outFile(fileName, std::ios::binary);
@@ -71,8 +81,22 @@ void tao_file() {
     random_device rd;
     mt19937 gen(rd());
     double min, max;
-    cout << "Enter min number: "; cin >> min;
-    cout << "Enter max number: "; cin >> max;
+    cout << "Enter min number: ";
+    if (!(cin >> min)) {
+        std::cin.clear(); 
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::cout << "Illegal input (NaN). Canceled\n";
+        return;
+    }
+    cout << "Enter max number: "; 
+    if (!(cin >> max)) {
+        std::cin.clear(); 
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        std::cout << "Illegal input (NaN). Canceled\n";
+        return;
+    }
     uniform_real_distribution<double> dis(min, max);
 
     int amount;
@@ -81,8 +105,20 @@ void tao_file() {
         double val = dis(gen);
         outFile.write(reinterpret_cast<const char*>(&val), sizeof(double));
     }
-
+    
     outFile.close();
+
+    std::ifstream file(fileName, ios::binary | ios::ate);
+
+    streamsize size = file.tellg();
+    file.seekg(0, ios::beg);
+
+    int count = size / sizeof(double);
+    numbers = vector<double>(count, 0);
+
+    file.read(reinterpret_cast<char*>(numbers.data()), size);
+    file.close();
+
     std::cout << "Successfully created " << fileName << " with " << amount << " numbers." << std::endl;
     return;
 }
@@ -108,6 +144,7 @@ void luu_file(vector<double> result) {
 }
 
 string tu_dong_liet_ke_file() {
+    // Hàm được generate bởi Gemini AI
     std::vector<std::string> danh_sach_file;
     std::cout << "--- List of .dat and .bin files ---\n";
     
@@ -134,28 +171,27 @@ string tu_dong_liet_ke_file() {
     return "";
 }
 
-vector<double> doc_file() {
+void doc_file(vector<double>& numbers) {
     string file_name = tu_dong_liet_ke_file();
-    if (file_name == "") return vector<double>(0);
+    if (file_name == "") return;
     ifstream file(file_name, ios::binary | ios::ate);    
     if (!file.is_open()) {
         cerr << "Could not open the file!" << endl;
         system("pause");
-        return vector<double>(0);
+        return;
     }
 
     streamsize size = file.tellg();
     file.seekg(0, ios::beg);
 
     int count = size / sizeof(double);
-    vector<double> result(count, 0);
+    numbers = vector<double>(count, 0);
 
-    if (file.read(reinterpret_cast<char*>(result.data()), size)) {
+    if (file.read(reinterpret_cast<char*>(numbers.data()), size)) {
         cout << "Successfully read " << count << " numbers.\n";
     }
     cout << endl;
     file.close();
-    return result;
 }
 
 bool file_ton_tai(const std::string& name) {
@@ -164,6 +200,7 @@ bool file_ton_tai(const std::string& name) {
 }
 
 void ve_bieu_do(const vector<double>& arr, const vector<int>& status) {
+    // Hàm được generate bởi Gemini AI
     cout << "\033[H\033[?25l";
 
     double max_val = *max_element(arr.begin(), arr.end());
@@ -434,7 +471,6 @@ vector<double> heap_sort_visualization(vector<double> arr) {
     return arr;
 }
 
-// Hàm kiểm tra mảng đã sắp xếp chưa
 bool da_sap_xep(const vector<double>& arr) {
     for (size_t i = 0; i < arr.size() - 1; i++) {
         if (arr[i] > arr[i + 1]) return false;
@@ -456,7 +492,6 @@ vector<double> bogo_sort(vector<double> array) {
         
         std::shuffle(array.begin(), array.end(), engine);
         
-        // Vẽ biểu đồ
         ve_bieu_do(array, status);
         
         count++;
@@ -496,61 +531,39 @@ int main() {
         cout << "110. Save the result" << endl;
         cout << "0. Exit" << endl;
         cout << endl;
-        cout << "WARNING: The visualization can only work propertly if you don't scroll, and can only show less than 30 elements." << endl;
+        cout << "WARNING: The visualization can only work propertly if you don't scroll, and It is recommended to use it to represent fewer than 30 elements. (If more, it will not show propertly)." << endl;
         cout << endl;
         cout << "Choose an action: ";
         cin >> choice;
 
         system("cls");
 
+        
+        if (choice >= 1 && choice <= 11 && numbers.empty()) {
+            cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
+            continue;
+        }
+
         switch (choice) {
             case 1:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 result = bubble_sort(numbers);
                 break;
             case 2:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 result = selection_sort(numbers);
                 break;
             case 3:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 result = insertion_sort(numbers);
                 break;
             case 4:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 result = merge_sort_visualization(numbers);
                 break;
             case 5:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 result = quick_sort_visualization(numbers);
                 break;
             case 6:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 result = heap_sort_visualization(numbers);
                 break;
             case 7:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 if (numbers.size() > 7) {
                     cout << "Canh bao: Mang qua lon cho Bogo Sort! Ban co muon tiep tuc? (y/n): ";
                     char c; cin >> c;
@@ -559,31 +572,15 @@ int main() {
                 result = bogo_sort(numbers);
                 break;
             case 8:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 cout << "In development" << endl;
                 break;
             case 9:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 cout << "In development" << endl;
                 break;
             case 10:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 cout << "In development" << endl;
                 break;
             case 11:
-                if (numbers.empty()) {
-                    cout << "The input is empty. Choose (120) or Generate (130) an Input file." << endl;
-                    break;
-                }
                 cout << "In development" << endl;
                 break;
             case 100:
@@ -593,10 +590,10 @@ int main() {
                 luu_file(result);
                 break;
             case 120:
-                numbers = doc_file();
+                doc_file(numbers);
                 break;
             case 130:
-                tao_file();
+                tao_file(numbers);
                 break;
             
         }
