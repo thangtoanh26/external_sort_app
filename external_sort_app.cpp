@@ -499,7 +499,7 @@ vector<double> bogo_sort(vector<double> array) {
         if (count >= 100000) cout << "Ughh... I can't sort this array, it is... too hard to be sorted?";
     }
 
-    fill(status.begin(), status.end(), 1);
+    if (da_sap_xep(array)) fill(status.begin(), status.end(), 1);
     ve_bieu_do(array, status);
 
     return array;
@@ -589,4 +589,5 @@ int main() {
     } while (choice != 0);
     return 0;
 }
+
 
