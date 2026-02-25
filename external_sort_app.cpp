@@ -563,7 +563,7 @@ int main() {
                 break;
             case 7:
                 if (numbers.size() > 7) {
-                    cout << "Canh bao: Mang qua lon cho Bogo Sort! Ban co muon tiep tuc? (y/n): ";
+                    cout << "Canh bao: Mang qua lon cho Bogo Sort! \nBan co muon tiep tuc? (y/n): ";
                     char c; cin >> c;
                     if (c != 'y') break;
                 }
@@ -589,3 +589,4 @@ int main() {
     } while (choice != 0);
     return 0;
 }
+
