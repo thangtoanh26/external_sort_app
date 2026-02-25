@@ -2,7 +2,7 @@
 
 Ứng dụng này cho phép bạn tạo dữ liệu số ngẫu nhiên, lưu trữ dưới dạng file nhị phân và quan sát trực quan quá trình sắp xếp của các thuật toán nổi tiếng.
 
-1. Chuẩn bị Dữ liệu (Bắt đầu từ đâu?)
+1. Chuẩn bị dữ liệu (Bắt đầu từ đâu?)
    
    Trước khi chọn thuật toán để xem, bạn cần có dữ liệu đầu vào. Bạn có hai lựa chọn tại menu chính:
    - Lựa chọn 130 (Tạo file ngẫu nhiên):
@@ -14,7 +14,7 @@
        - Ứng dụng sẽ liệt kê các file `.dat` hoặc `.bin` trong thư mục hiện hành.
        - Bạn chỉ cần nhập số thứ tự của file để tải dữ liệu vào bộ nhớ.
 
-3. Các thuật toán Sắp xếp Hỗ trợ
+2. Các thuật toán sắp xếp được hỗ trợ
    
    - Sau khi đã có dữ liệu (hiển thị thông báo "Successfully read/created"), bạn có thể chọn các phím từ 1 đến 7 để bắt đầu xem mô phỏng:
      ```
@@ -35,7 +35,7 @@
      7      |  Bogo Sort      | "Sắp xếp dựa trên nhân phẩm" (xáo trộn ngẫu nhiên).
             |                 | Cảnh báo: Đừng thử với mảng > 7 phần tử trừ khi bạn có quá nhiều thời gian!
     ```
-4. Cách đọc Biểu đồ Màu sắc
+3. Cách đọc biểu đồ
    
    Khi ứng dụng đang chạy mô phỏng, bạn sẽ thấy các thanh biểu đồ dấu # với các màu sắc khác nhau:
    - Xanh lá: Phần tử đã nằm đúng vị trí (đã xong).
@@ -43,7 +43,7 @@
    - Vàng: Phần tử đặc biệt (như Pivot trong Quick Sort hoặc Min trong Selection Sort).
    - Xanh dương: Các phần tử còn lại trong mảng.
 
-5. Tùy chỉnh và Lưu kết quả
+4. Tùy chỉnh và Lưu kết quả
    
    - Thay đổi tốc độ (Phím 100): Bạn có thể nhập khoảng thời gian trễ (miliseconds). Số càng nhỏ, mô phỏng chạy càng nhanh.
    - Lưu kết quả (Phím 110): Sau khi sắp xếp xong, bạn có thể lưu mảng đã sắp xếp vào một file .dat mới để sử dụng sau này.
