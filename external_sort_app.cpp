@@ -54,7 +54,7 @@ void tao_file(vector<double>& numbers) {
     cout << "Enter new file name: "; cin >> fileName;
     string currentTime = getCurrentTime();
     if (isFileExists(fileName + ".dat")) {
-        cout << "There is already a file with the same name in this location. Want to rename to " << fileName
+        cout << "There is already a file with the same name in this location. \nWant to rename to " << fileName
              << "_" << currentTime << ".dat? 1 (Yes) / 0 (No) : ";
         int check;
         if (!(cin >> check)) {
@@ -81,7 +81,7 @@ void tao_file(vector<double>& numbers) {
     random_device rd;
     mt19937 gen(rd());
     double min, max;
-    cout << "Enter min number: ";
+    cout << "Enter min number:    ";
     if (!(cin >> min)) {
         std::cin.clear(); 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -89,7 +89,7 @@ void tao_file(vector<double>& numbers) {
         std::cout << "Illegal input (NaN). Canceled\n";
         return;
     }
-    cout << "Enter max number: "; 
+    cout << "Enter max number:    "; 
     if (!(cin >> max)) {
         std::cin.clear(); 
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -100,7 +100,7 @@ void tao_file(vector<double>& numbers) {
     uniform_real_distribution<double> dis(min, max);
 
     int amount;
-    cout << "Enter amount: "; cin >> amount;
+    cout << "Enter amount:        "; cin >> amount;
     for (int i = 0; i < amount; ++i) {
         double val = dis(gen);
         outFile.write(reinterpret_cast<const char*>(&val), sizeof(double));
@@ -128,7 +128,7 @@ void luu_file(vector<double> result) {
     cout << "Enter the name: "; cin >> result_file_name;
     result_file_name += ".dat";
     if (isFileExists(result_file_name)) {
-        cout << "There is already a file with the same name in this location. Want to replace? 1 (Yes) / 0 (No) : ";
+        cout << "There is already a file with the same name in this location. \nWant to replace? 1 (Yes) / 0 (No) : ";
         int check; cin >> check;
         if (check == 0) return;
     }
@@ -177,6 +177,7 @@ void doc_file(vector<double>& numbers) {
     ifstream file(file_name, ios::binary | ios::ate);    
     if (!file.is_open()) {
         cerr << "Could not open the file!" << endl;
+        cout << endl;
         system("pause");
         return;
     }
@@ -487,14 +488,15 @@ vector<double> bogo_sort(vector<double> array) {
 
     long long count = 0;
 
-    while (!da_sap_xep(array)) {
+    while (!da_sap_xep(array) && count < 100000 ) {
         fill(status.begin(), status.end(), 2);
         
         std::shuffle(array.begin(), array.end(), engine);
         
         ve_bieu_do(array, status);
         
-        count++;
+        count += delay;
+        if (count >= 100000) cout << "Ughh... I can't sort this array, it is... too hard to be sorted?";
     }
 
     fill(status.begin(), status.end(), 1);
@@ -522,10 +524,6 @@ int main() {
         cout << "5. Visualizing Quick Sort" << endl;
         cout << "6. Visualizing Heap Sort" << endl;
         cout << "7. Visualizing Bogo Sort" << endl;
-        // cout << "8. Visualizing Shell Sort" << endl;
-        // cout << "9. Visualizing Cocktail Shaker Sort" << endl;
-        // cout << "10. Visualizing Gnome Sort" << endl;
-        // cout << "11. Visualizing Comb Sort" << endl;
         cout << endl;
         cout << "100. Change Visualizing Interval" << endl;
         cout << "110. Save the result" << endl;
@@ -571,18 +569,6 @@ int main() {
                 }
                 result = bogo_sort(numbers);
                 break;
-            case 8:
-                cout << "In development" << endl;
-                break;
-            case 9:
-                cout << "In development" << endl;
-                break;
-            case 10:
-                cout << "In development" << endl;
-                break;
-            case 11:
-                cout << "In development" << endl;
-                break;
             case 100:
                 cout << "Enter Interval (ms): "; cin >> delay;
                 break;
@@ -598,6 +584,7 @@ int main() {
             
         }
         
+        cout << endl;
         system("pause");
     } while (choice != 0);
     return 0;
